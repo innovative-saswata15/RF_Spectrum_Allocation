@@ -1,0 +1,5 @@
+rfsim
+test_coloring
+*.o
+*.csv
+build/
