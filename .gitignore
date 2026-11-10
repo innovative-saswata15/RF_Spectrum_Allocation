@@ -3,3 +3,5 @@ test_coloring
 *.o
 *.csv
 build/
+.vscode/*
+!.vscode/c_cpp_properties.json
