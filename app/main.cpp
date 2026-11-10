@@ -1,6 +1,9 @@
 #include "network/network_generator.hpp"
 #include "physics/interference_model.hpp"
 #include "graph/graph_builder.hpp"
+#include "coloring/greedy_coloring.hpp"
+#include "coloring/vertex_order.hpp"
+#include "coloring/coloring_metrics.hpp"
 
 #include <iostream>
 
@@ -52,6 +55,23 @@ int main() {
     std::cout << "\nGraph valid: "
               << (graph.isValid() ? "Yes" : "No")
               << '\n';
+
+    // 7. Channel allocation (Member 2)
+    rf::ColorAssignment colors = rf::GreedyColoring::color(
+        graph, rf::VertexOrder::natural(graph.vertexCount())
+    );
+
+    std::cout << "\nGreedy channel allocation:\n";
+    for (rf::VertexId i = 0; i < graph.vertexCount(); ++i) {
+        std::cout << "T" << i << " -> channel " << colors[i] << '\n';
+    }
+
+    std::cout << "Channels used: "
+              << rf::ColoringMetrics::colorsUsed(colors)
+              << "  (Delta + 1 bound = "
+              << rf::ColoringMetrics::maxDegree(graph) + 1 << ")\n";
+    std::cout << "Conflicts: "
+              << rf::ColoringMetrics::conflicts(graph, colors) << '\n';
 
     return 0;
 }
